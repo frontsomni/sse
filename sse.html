@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Server-Sent Events</title>
+</head>
+<body>
+  
+
+  <script>
+    const source = new EventSource('http://127.0.0.1:8866/api/stream?q=sse')
+    // 打开连接
+    source.addEventListener('open', (event) => {
+      console.log('open')
+    }, false)
+    
+    // 监听服务端默认 message 事件信息
+    source.addEventListener('message', event => {
+      console.log(event)
+      console.log(event.data)
+    })
+    
+    // 监听服务端 sse 事件信息
+    source.addEventListener('sse', event => {
+      console.log(event)
+    })
+
+    // 连接报错
+    source.addEventListener('error', event => {
+      console.log(event)
+    })
+
+    // 5s 后断开连接
+    setTimeout(() => {
+      source.close()
+      // 释放 open、message、see、error 事件
+    }, 5 * 1000)
+  </script>
+</body>
+</html>
